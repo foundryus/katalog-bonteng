@@ -116,3 +116,55 @@ export async function tambahProduk(prevState, formData) {
   revalidatePath("/admin");
   redirect("/admin");
 }
+
+export async function ubahProduk(prevState, formData) {
+  const data = formData instanceof FormData ? formData : prevState;
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { error: "Aksi ditolak: Anda harus login terlebih dahulu." };
+  }
+
+  const id = data?.get("id");
+  if (!id) {
+    return { error: "ID produk tidak valid." };
+  }
+
+  const nama = data?.get("nama")?.toString().trim();
+  const hargaRaw = data?.get("harga")?.toString().trim();
+  const harga = parseInt(hargaRaw, 10);
+  const kategori = data?.get("kategori")?.toString().trim() || null;
+  const foto_url = data?.get("foto_url")?.toString().trim() || null;
+  const deskripsi = data?.get("deskripsi")?.toString().trim() || null;
+
+  if (!nama) {
+    return { error: "Nama produk wajib diisi." };
+  }
+  if (isNaN(harga) || harga < 0) {
+    return { error: "Harga harus berupa angka valid (minimal 0)." };
+  }
+
+  const { error } = await supabase
+    .from("produk")
+    .update({
+      nama,
+      harga,
+      kategori,
+      foto_url,
+      deskripsi,
+    })
+    .eq("id", id);
+
+  if (error) {
+    return { error: `Gagal memperbarui produk: ${error.message}` };
+  }
+
+  revalidatePath("/");
+  revalidatePath(`/produk/${id}`);
+  revalidatePath("/admin");
+  redirect("/admin");
+}

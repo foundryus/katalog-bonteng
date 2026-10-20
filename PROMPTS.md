@@ -143,3 +143,22 @@ isikan sesuai saran anda
 
 **Perbaikan:**
 - Menyesuaikan penanganan argumen Server Action `tambahProduk` agar fleksibel saat dipanggil via `useActionState` maupun form action standar.
+
+### US-09 Ubah produk
+
+**Prompt:**
+Baca docs/user-stories.md bagian US-09 Sampai US-50.
+
+isikan sesuai saran anda
+
+**Hasil:**
+- Dibuat Server Action `ubahProduk` di `app/admin/actions.js` untuk memperbarui data produk di tabel `produk` di Supabase.
+- Memeriksa sesi login admin di sisi server (`supabase.auth.getUser()`) sebelum data dapat diperbarui.
+- Memvalidasi input (nama wajib, harga valid) dan memperbarui kolom di database berdasarkan `id`.
+- Halaman `app/admin/produk/[id]/ubah/page.jsx` mengambil data produk dari database untuk mengisi form dengan data lama (`defaultValue`).
+- Jika produk tidak ditemukan, memanggil `notFound()`.
+- Menghubungkan form ke Server Action `ubahProduk` dan menghapus `CatatanBelumAktif`.
+- Setelah update berhasil, merevalidasi cache rute dan mengalihkan kembali ke `/admin`.
+
+**Perbaikan:**
+- Menambahkan input hidden `id` pada `components/FormProduk.jsx` agar ID produk otomatis terkirim saat form di-submit ke Server Action.
