@@ -125,3 +125,21 @@ isikan sesuai saran anda
 
 **Perbaikan:**
 - Menggunakan `createSessionClient` dengan fallback ke `createServerClient` agar daftar produk dapat dimuat dengan andal baik dalam sesi admin aktif maupun saat rendering sisi server.
+
+### US-08 Tambah produk
+
+**Prompt:**
+Baca docs/user-stories.md bagian US-08.
+
+isikan sesuai saran anda
+
+**Hasil:**
+- Dibuat Server Action `tambahProduk` di `app/admin/actions.js` yang menyimpan produk baru ke tabel `produk` di Supabase.
+- Memverifikasi otentikasi login admin di server sebelum menyimpan (`supabase.auth.getUser()`).
+- Melakukan validasi input di server (nama produk wajib, harga angka valid >= 0).
+- Setelah berhasil menyimpan, merevalidasi cache (`revalidatePath`) dan mengalihkan halaman kembali ke `/admin`.
+- Memperbarui `components/FormProduk.jsx` agar mendukung pemrosesan form dengan Server Action dan menampilkan pesan error jika terjadi kegagalan.
+- Menghubungkan form di `app/admin/produk/baru/page.jsx` ke Server Action `tambahProduk` dan menghapus `CatatanBelumAktif`.
+
+**Perbaikan:**
+- Menyesuaikan penanganan argumen Server Action `tambahProduk` agar fleksibel saat dipanggil via `useActionState` maupun form action standar.
