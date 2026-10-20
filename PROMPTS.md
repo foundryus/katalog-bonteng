@@ -162,3 +162,70 @@ isikan sesuai saran anda
 
 **Perbaikan:**
 - Menambahkan input hidden `id` pada `components/FormProduk.jsx` agar ID produk otomatis terkirim saat form di-submit ke Server Action.
+
+### US-10 Hapus produk
+
+**Prompt:**
+lanjut aja sampai US50
+
+**Hasil:**
+- Dibuat Server Action `hapusProduk` di `app/admin/actions.js` yang memvalidasi sesi admin login di server sebelum menghapus data dari Supabase.
+- Tombol Hapus pada `components/TabelProduk.jsx` meminta konfirmasi pengguna (`window.confirm`) sebelum request penghapusan dikirimkan.
+- Setelah produk terhapus, cache halaman direvalidasi dan halaman kembali diperbarui.
+
+### US-11 Filter kategori atau pencarian
+
+**Hasil:**
+- Halaman beranda `app/page.jsx` ditambahkan input pencarian nama produk dan filter kategori dinamis dari database.
+- Menyaring query database secara dinamis menggunakan `.ilike("nama", ...)` dan `.eq("kategori", ...)`.
+
+### US-12 Pilih jumlah sebelum memesan
+
+**Hasil:**
+- Komponen `components/TombolWhatsApp.jsx` ditambahkan stepper pemilih jumlah produk (+ dan -).
+- Pesan otomatis WhatsApp dan label tombol menghitung total harga serta menyertakan jumlah item yang dipesan.
+
+### US-13 PWA
+
+**Hasil:**
+- Dibuat file manifest `app/manifest.js` yang merujuk pada ikon `public/icons/icon-192.png` dan `public/icons/icon-512.png`.
+- Menautkan manifest ke metadata halaman root di `app/layout.jsx` agar aplikasi dapat di-install di layar utama HP.
+
+### US-15 Urutkan produk
+
+**Hasil:**
+- Menambahkan opsi pengurutan di `app/page.jsx` (Bawaan, Termurah, Termahal, Terbaru).
+- Pengurutan langsung diaplikasikan ke query Supabase (`.order(...)`).
+
+### US-17 Produk terkait
+
+**Hasil:**
+- Halaman `app/produk/[id]/page.jsx` menampilkan daftar produk terkait dari kategori yang sama dari database Supabase (mengecualikan produk yang sedang aktif).
+
+### US-22 Halaman Tentang dan kontak toko
+
+**Hasil:**
+- Dibuat halaman profil toko `/tentang` (`app/tentang/page.jsx`) yang memuat profil, alamat, jam buka, dan kontak WhatsApp toko.
+- Ditautkan dari navigasi header dan footer.
+
+### US-23 Bagikan atau salin link produk
+
+**Hasil:**
+- Dibuat komponen `components/TombolBagikan.jsx` dengan Web Share API dan fallback salin ke clipboard serta umpan balik notifikasi "Link tersalin!".
+
+### US-26 Metadata SEO dan Open Graph
+
+**Hasil:**
+- Halaman detail produk memakai `generateMetadata` untuk mengenerate judul, deskripsi, dan Open Graph image sesuai data produk di Supabase.
+
+### US-27 sitemap.xml dan robots.txt
+
+**Hasil:**
+- Dibuat `app/sitemap.js` yang mengambil seluruh URL produk dari database secara dinamis.
+- Dibuat `app/robots.js` yang valid dan merujuk ke lokasi sitemap.
+
+### US-28 Halaman 404 dan loading kustom
+
+**Hasil:**
+- Dibuat skeleton loading dinamis di `app/loading.jsx` dan `app/produk/[id]/loading.jsx`.
+- Memastikan halaman `app/not-found.jsx` berfungsi dan memiliki navigasi kembali ke beranda.

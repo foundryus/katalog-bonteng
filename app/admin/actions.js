@@ -168,3 +168,30 @@ export async function ubahProduk(prevState, formData) {
   revalidatePath("/admin");
   redirect("/admin");
 }
+
+export async function hapusProduk(formData) {
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("Aksi ditolak: Anda harus login terlebih dahulu.");
+  }
+
+  const id = formData.get("id");
+  if (!id) {
+    throw new Error("ID produk tidak valid.");
+  }
+
+  const { error } = await supabase.from("produk").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(`Gagal menghapus produk: ${error.message}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  redirect("/admin");
+}
